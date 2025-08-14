@@ -1,4 +1,4 @@
-# **LYRA – Beyond Retrieval, Into Reasoning**
+# **LAYRA – Beyond Retrieval, Into Reasoning**
 
 **LYRA** is a next-generation **Hybrid RAG (Retrieval-Augmented Generation) + AI Reasoning Engine** designed to **go beyond retrieval** and provide **logical reasoning, predictive analysis, and actionable insights** across multiple domains.
 
@@ -41,7 +41,7 @@ Unlike traditional RAG systems that only retrieve data and answer queries, LYRA 
 
 ---
 
-## **🧠 How LYRA Works (Architecture)**
+## **🧠 How LAYRA Works (Architecture)**
 
 1. **Knowledge Ingestion:** Data from multiple domains is converted into embeddings and stored in a **Vector DB** (like Pinecone/FAISS).
 2. **Hybrid Retrieval:** Combines **vector search + graph queries** to fetch contextually rich information.
