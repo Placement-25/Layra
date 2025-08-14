@@ -4,7 +4,7 @@
 
 ---
 
-## **🔍 What is LYRA?**
+## **🔍 What is LAYRA?**
 
 LYRA stands for:
 
