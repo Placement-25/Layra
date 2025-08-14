@@ -9,6 +9,7 @@
 LYRA stands for:
 
 * **L – Logical:** Focused on structured reasoning and decision-making.
+* **A – Augmented :** 
 * **Y – Yielding:** Provides actionable results, insights, and predictions.
 * **R – Retrieval:** Core RAG-powered intelligent information fetching.
 * **A – Agent:** Functions as a multi-agent AI system that collaborates across domains.
