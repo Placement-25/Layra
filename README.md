@@ -4,11 +4,12 @@
 
 ---
 
-## **🔍 What is LYRA?**
+## **🔍 What is LAYRA?**
 
 LYRA stands for:
 
 * **L – Logical:** Focused on structured reasoning and decision-making.
+* **A – Augmented :** 
 * **Y – Yielding:** Provides actionable results, insights, and predictions.
 * **R – Retrieval:** Core RAG-powered intelligent information fetching.
 * **A – Agent:** Functions as a multi-agent AI system that collaborates across domains.
@@ -40,7 +41,7 @@ Unlike traditional RAG systems that only retrieve data and answer queries, LYRA 
 
 ---
 
-## **🧠 How LYRA Works (Architecture)**
+## **🧠 How LAYRA Works (Architecture)**
 
 1. **Knowledge Ingestion:** Data from multiple domains is converted into embeddings and stored in a **Vector DB** (like Pinecone/FAISS).
 2. **Hybrid Retrieval:** Combines **vector search + graph queries** to fetch contextually rich information.
