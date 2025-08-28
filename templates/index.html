@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LAYRA • Hybrid RAG Reasoning Bot</title>
+  <meta name="description" content="LAYRA is a next‑generation Hybrid RAG with an AI Reasoning Engine that fuses vector retrieval with deep reasoning to deliver context‑aware answers and actionable insights across domains." />
+  <meta name="theme-color" content="#0f1226" />
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --card:#12172a;
+      --muted:#9aa4c7;
+      --text:#e8ecff;
+      --accent:#7c5cff;
+      --accent-2:#00e2a6;
+      --border:rgba(255,255,255,.08);
+      --glow:0 10px 30px rgba(124,92,255,.25), 0 2px 10px rgba(0,226,166,.12);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text); background: radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,.15), transparent 50%),
+                radial-gradient(900px 700px at -10% 20%, rgba(0,226,166,.12), transparent 50%), var(--bg);
+      line-height:1.6;
+    }
+    a{color:inherit}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(11,15,26,.75), rgba(11,15,26,.45));
+      border-bottom:1px solid var(--border);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .brand{display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.3px}
+    .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:grid; place-items:center; box-shadow: var(--glow)}
+    .logo svg{filter: drop-shadow(0 2px 8px rgba(0,0,0,.35))}
+    .nav a.btn{padding:10px 14px;border:1px solid var(--border); border-radius:12px; text-decoration:none}
+    .primary{background:linear-gradient(135deg,var(--accent),#5b8bff); border-color:transparent; color:#fff; box-shadow: var(--glow)}
+
+    .hero{display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center; padding:40px 0}
+    .hero h1{font-size:44px; line-height:1.08; margin:0 0 12px; letter-spacing:.2px}
+    .hero p{color:var(--muted); margin:0 0 20px}
+    .badges{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    .badge{border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:13px; color:#c7cff7; background: rgba(255,255,255,.03)}
+    .hero-card{background:linear-gradient(180deg, rgba(124,92,255,.08), rgba(124,92,255,.03)); border:1px solid var(--border); border-radius:var(--radius); padding:20px}
+
+    .grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--radius); padding:18px}
+
+    .section-title{font-size:20px; letter-spacing:.4px; margin:2px 0 14px; color:#cfd6ff}
+
+    .kpis{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+    .kpi{padding:16px; border-radius:16px; border:1px dashed var(--border); background: rgba(0,0,0,.15)}
+    .kpi .label{font-size:13px; color:#b6bee6}
+    .kpi .value{font-size:28px; font-weight:800}
+    .kpi .delta{font-size:12px; color: #9de6cd}
+
+    .arch{grid-column: span 7}
+    .arch svg{width:100%; height:auto}
+    .desc{grid-column: span 5}
+
+    /* Demo console */
+    .console{background:#0e1223; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden}
+    .console .top{display:flex; align-items:center; gap:10px; padding:10px 12px; background:#0a0e1d; border-bottom:1px solid var(--border)}
+    .dot{width:10px; height:10px; border-radius:50%; background:#ff5f56}
+    .dot:nth-child(2){background:#ffbd2e}
+    .dot:nth-child(3){background:#27c93f}
+    .io{display:grid; grid-template-columns: 1fr 42px; gap:10px; padding:12px}
+    .io input{width:100%; padding:12px 14px; border-radius:12px; background:#0b0f1f; border:1px solid var(--border); color:var(--text)}
+    .io button{border-radius:12px; border:1px solid var(--border); background:linear-gradient(135deg,var(--accent),#5b8bff); color:#fff; font-weight:700}
+    .stream{padding:16px; min-height:120px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; color:#cfe1ff}
+    .stream .token{opacity:0; animation: pop .6s forwards}
+    @keyframes pop{to{opacity:1}}
+
+    /* Timeline */
+    .timeline{display:flex; gap:14px; flex-wrap:wrap}
+    .pill{padding:8px 10px; border:1px solid var(--border); border-radius:10px; color:#b7c0ea}
+
+    /* Features grid */
+    .features{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+    .feature h4{margin:8px 0 4px}
+    .feature p{color:#aeb7df; margin:0}
+
+    /* Footer */
+    footer{border-top:1px solid var(--border); margin-top:40px}
+    .footer-grid{display:grid; grid-template-columns: 1fr 1fr; gap:16px; padding:24px 0}
+    .small{font-size:13px; color:#9aa4c7}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr;}
+      .arch{grid-column: span 12}
+      .desc{grid-column: span 12}
+      .kpis{grid-template-columns:1fr}
+      .features{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><div class="logo" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12c0-4.97 4.03-9 9-9 1.7 0 3.29.47 4.65 1.29l-2.1 3.64A5.99 5.99 0 0 0 12 7a5 5 0 0 0-5 5 5 5 0 0 0 7.78 4.16l2.1 3.64A8.96 8.96 0 0 1 12 21c-4.97 0-9-4.03-9-9Z" fill="white"/>
+          <path d="M21 12a9 9 0 0 1-4.65 7.71l-2.1-3.64A6 6 0 0 0 18 12a6 6 0 0 0-9.9-4.47l-2.1-3.64A9 9 0 0 1 21 12Z" fill="url(#g)"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#00e2a6"/></linearGradient></defs>
+        </svg>
+      </div> LAYRA</div>
+      <nav style="display:flex; gap:10px">
+        <a class="btn" href="#demo">Live Demo</a>
+        <a class="btn" href="#architecture">Architecture</a>
+        <a class="btn primary" href="#contact">Get the Code</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>Hybrid RAG + AI Reasoning Engine</h1>
+        <p>Vector retrieval fused with deep reasoning for context‑aware answers and actionable insights. Modular, production‑ready, and blazing fast.</p>
+        <div class="badges">
+          <span class="badge">Python</span>
+          <span class="badge">LangChain</span>
+          <span class="badge">FAISS / Chroma</span>
+          <span class="badge">OpenAI / LLM Agnostic</span>
+          <span class="badge">Reactive Streams</span>
+        </div>
+        <div style="margin-top:22px" class="kpis">
+          <div class="kpi"><div class="label">Answer Accuracy</div><div class="value">+28%</div><div class="delta">via hybrid retrieval + reasoning</div></div>
+          <div class="kpi"><div class="label">Latency</div><div class="value">−35%</div><div class="delta">through iterative tuning</div></div>
+          <div class="kpi"><div class="label">Timeframe</div><div class="value">Jan–Mar 2023</div><div class="delta">3‑month build</div></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="section-title">What is LAYRA?</div>
+        <p class="small">A next‑gen Hybrid RAG with a reasoning layer that composes retrieved context, applies logical operators, and produces verifiable, source‑grounded answers in real time.</p>
+        <div class="timeline" aria-label="Highlights">
+          <span class="pill">Hybrid vector + keyword retrieval</span>
+          <span class="pill">Step‑wise reasoning traces</span>
+          <span class="pill">Citations & confidence</span>
+          <span class="pill">Tools & function calling</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="grid" style="margin-top:10px">
+      <div class="arch card" style="grid-column: span 7">
+        <div class="section-title">Try the demo</div>
+        <div class="console" role="region" aria-label="LAYRA demo console">
+          <div class="top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="io">
+            <input id="q" placeholder="Ask about your domain (e.g., ‘Summarize failure modes for lithium‑ion batteries’)" aria-label="Prompt"/>
+            <button id="go">▶</button>
+          </div>
+          <div id="out" class="stream" aria-live="polite"></div>
+        </div>
+        <p class="small" style="margin-top:10px">This is a front‑end simulation that streams a mocked response to showcase UX. Wire the "askLayra" function to your backend to go live.</p>
+      </div>
+
+      <div class="desc card" id="architecture">
+        <div class="section-title">Architecture (Hybrid RAG + Reasoning)</div>
+        <svg viewBox="0 0 900 420" aria-label="Architecture diagram">
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7c5cff"/>
+              <stop offset="1" stop-color="#00e2a6"/>
+            </linearGradient>
+            <style>
+              .b{fill:#0e1327; stroke:#32406d; stroke-width:1.2}
+              .t{fill:#cfe1ff; font: 12px/1.3 ui-sans-serif, system-ui}
+              .a{stroke:url(#lg1); stroke-width:2; marker-end:url(#m) }
+            </style>
+            <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="url(#lg1)"/>
+            </marker>
+          </defs>
+          <!-- Query -->
+          <rect class="b" x="40" y="30" width="150" height="60" rx="12"/>
+          <text class="t" x="60" y="65">User Query</text>
+
+          <!-- Router -->
+          <rect class="b" x="240" y="30" width="170" height="60" rx="12"/>
+          <text class="t" x="260" y="65">Retriever Router (hybrid)</text>
+
+          <!-- Vector / BM25 -->
+          <rect class="b" x="460" y="10" width="170" height="60" rx="12"/>
+          <text class="t" x="480" y="45">Vector Index (FAISS/Chroma)</text>
+
+          <rect class="b" x="460" y="90" width="170" height="60" rx="12"/>
+          <text class="t" x="480" y="125">Keyword/BM25</text>
+
+          <!-- Fusion -->
+          <rect class="b" x="680" y="50" width="180" height="70" rx="12"/>
+          <text class="t" x="700" y="90">Reciprocal Rank Fusion</text>
+
+          <!-- Reasoner -->
+          <rect class="b" x="240" y="150" width="280" height="80" rx="12"/>
+          <text class="t" x="260" y="190">Reasoning Engine (CoT, ToT, tools)</text>
+
+          <!-- Synthesizer -->
+          <rect class="b" x="560" y="150" width="300" height="80" rx="12"/>
+          <text class="t" x="580" y="190">Answer Synthesizer (citations + confidence)</text>
+
+          <!-- arrows -->
+          <path class="a" d="M190 60 L 240 60"/>
+          <path class="a" d="M410 60 L 460 40"/>
+          <path class="a" d="M410 60 L 460 120"/>
+          <path class="a" d="M630 40 L 680 85"/>
+          <path class="a" d="M630 120 L 680 85"/>
+          <path class="a" d="M820 85 L 820 150 L 520 190"/>
+          <path class="a" d="M190 60 L 240 190"/>
+          <path class="a" d="M520 190 L 560 190"/>
+        </svg>
+        <ul class="small" style="margin:10px 0 0 16px">
+          <li>Hybrid retriever combines ANN vector search with BM25 to maximize recall.</li>
+          <li>Rank fusion merges candidate contexts with source diversity guarantees.</li>
+          <li>Reasoning layer runs step‑wise plans, tool calls and consistency checks.</li>
+          <li>Answer synthesizer returns citations, confidence and optional JSON.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section style="margin-top:10px" class="grid">
+      <div class="card" style="grid-column: span 7">
+        <div class="section-title">Features</div>
+        <div class="features">
+          <div class="feature">
+            <h4>Modular Pipeline</h4>
+            <p>Plug‑and‑play retrievers, rankers, reasoners and formatters.</p>
+          </div>
+          <div class="feature">
+            <h4>Domain Adaptation</h4>
+            <p>Per‑domain prompts, vectors and guardrails for precision.</p>
+          </div>
+          <div class="feature">
+            <h4>Streaming UX</h4>
+            <p>Token‑level streaming with trace and citations toggles.</p>
+          </div>
+          <div class="feature">
+            <h4>Observability</h4>
+            <p>Latency budgets, retry policies and eval dashboards.</p>
+          </div>
+          <div class="feature">
+            <h4>Offline Evals</h4>
+            <p>Golden‑set QA, ragas/LLM‑as‑judge and bias checks.</p>
+          </div>
+          <div class="feature">
+            <h4>Prod‑Ready</h4>
+            <p>Type‑safe schemas, idempotent handlers, rate limits.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="grid-column: span 5">
+        <div class="section-title">Tech Stack</div>
+        <ul class="small" style="margin-left:16px">
+          <li><strong>Python</strong> • LangChain • pydantic • FastAPI</li>
+          <li><strong>Retrievers</strong> • FAISS / Chroma • BM25 • RRF</li>
+          <li><strong>LLMs</strong> • OpenAI / Anthropic / Local (agnostic)</li>
+          <li><strong>Storage</strong> • S3 • Postgres • Redis</li>
+          <li><strong>Infra</strong> • Docker • Celery • Prometheus</li>
+        </ul>
+        <div style="margin-top:10px" class="section-title">Results</div>
+        <ul class="small" style="margin-left:16px">
+          <li>+28% answer accuracy vs. baseline dense‑only RAG.</li>
+          <li>−35% end‑to‑end latency through batching & caching.</li>
+          <li>Higher trust via citations and confidence scores.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:10px">
+      <div class="section-title">Implementation Notes (hooking up to backend)</div>
+      <ol class="small" style="margin-left:16px">
+        <li>Replace <code>askLayra()</code> with a <code>fetch()</code> call to your FastAPI/Flask endpoint that streams SSE or chunked tokens.</li>
+        <li>Return JSON with fields: <code>token</code>, <code>source</code>, <code>trace</code>, <code>confidence</code>. Append to UI as they arrive.</li>
+        <li>Use <em>retry‑after</em> and circuit breakers for rate limits; cache retrieval results for popular queries.</li>
+        <li>Log spans for: retrieval, reasoning, synthesis. Send to Prometheus/Grafana for latency/accuracy KPIs.</li>
+      </ol>
+      <details style="margin-top:8px"><summary class="small">Sample FastAPI response contract</summary>
+        <pre class="small">{
+  "answer": "...streamed...",
+  "citations": [
+    {"title":"Paper A","url":"https://...","snippet":"..."}
+  ],
+  "confidence": 0.82,
+  "trace": ["retrieve","plan","tool(call:search)","verify","synthesize"]
+}</pre>
+      </details>
+    </section>
+
+    <section id="contact" class="card" style="margin-top:10px">
+      <div class="section-title">Get the Code / Contact</div>
+      <form class="grid" onsubmit="event.preventDefault(); toast('Thanks! I\'ll reach out.'); this.reset();">
+        <input style="grid-column: span 4" placeholder="Name" required />
+        <input style="grid-column: span 4" placeholder="Email" type="email" required />
+        <input style="grid-column: span 4" placeholder="Company / Org" />
+        <textarea style="grid-column: span 12; min-height:90px; border-radius:12px; background:#0b0f1f; border:1px solid var(--border); color:var(--text); padding:12px" placeholder="Tell me about your use case"></textarea>
+        <button class="btn primary" style="grid-column: span 12; padding:12px 16px; cursor:pointer">Request Repo Access</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="small">© LAYRA • Hybrid Retrieval‑Augmented Reasoning • Built 2023</div>
+      <div class="small" style="text-align:right">Made with ❤ — HTML • CSS • JS</div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" style="position:fixed; left:50%; transform:translateX(-50%) translateY(20px); bottom:20px; background:rgba(7,12,28,.9); border:1px solid var(--border); color:#e9eeff; padding:12px 16px; border-radius:12px; box-shadow: var(--glow); opacity:0; pointer-events:none; transition:.3s">Saved</div>
+
+  <script>
+    const out = document.getElementById('out');
+    const q = document.getElementById('q');
+    const go = document.getElementById('go');
+
+    function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+    function toast(msg){
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.style.opacity = 1; t.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(()=>{ t.style.opacity = 0; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2400);
+    }
+
+    async function streamTokens(text){
+      out.innerHTML = '';
+      const words = text.split(/(\s+)/);
+      for(const w of words){
+        const span = document.createElement('span'); span.className = 'token'; span.textContent = w; out.appendChild(span);
+        await sleep(30 + Math.random()*50);
+      }
+    }
+
+    function askLayra(prompt){
+      // Mocked response: replace with fetch to your API for live results
+      const canned = `\nReasoned answer:\n• Lithium‑ion battery failure modes include thermal runaway, dendrite formation, and SEI degradation.\n• Mitigations: precise thermal management, cell balancing, and electrolyte selection.\n\nCitations: [1] Smith et al., 2021  [2] DOE Handbook\nConfidence: 0.83`;
+      return canned;
+    }
+
+    go.addEventListener('click', async ()=>{
+      const prompt = q.value.trim();
+      if(!prompt){ q.focus(); toast('Enter a prompt'); return; }
+      out.textContent = 'Thinking…';
+      await sleep(300);
+      const answer = askLayra(prompt);
+      streamTokens(answer);
+    });
+
+    q.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ go.click(); } });
+  </script>
+</body>
+</html>

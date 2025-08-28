@@ -1,6 +1,6 @@
-# **LYRA – Beyond Retrieval, Into Reasoning**
+# **LAYRA – Beyond Retrieval, Into Reasoning**
 
-**LYRA** is a next-generation **Hybrid RAG (Retrieval-Augmented Generation) + AI Reasoning Engine** designed to **go beyond retrieval** and provide **logical reasoning, predictive analysis, and actionable insights** across multiple domains.
+**LAYRA** is a next-generation **Hybrid RAG (Retrieval-Augmented Generation) + AI Reasoning Engine** designed to **go beyond retrieval** and provide **logical reasoning, predictive analysis, and actionable insights** across multiple domains.
 
 ---
 
