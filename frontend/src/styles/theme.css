@@ -1,0 +1,14 @@
+:root {
+  --color-layra-bg: #090B12;
+  --color-layra-sidebar: #0D1019;
+  --color-layra-surface: #121725;
+  --color-layra-elevated: #171E2D;
+  --color-layra-border: #252C3C;
+  --color-layra-primary: #8B7CFF;
+  --color-layra-secondary: #55D6E8;
+  --color-layra-text: #F4F5FA;
+  --color-layra-muted: #929AAF;
+  --color-layra-success: #39C99A;
+  --color-layra-warning: #F3B96B;
+  --color-layra-danger: #FF6B6B;
+}

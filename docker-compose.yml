@@ -1,0 +1,75 @@
+services:
+  # 1. PostgreSQL Relational Store
+  postgres:
+    image: postgres:16-alpine
+    container_name: layra-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: layra_user
+      POSTGRES_PASSWORD: layra_secure_password
+      POSTGRES_DB: layra_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - layra-network
+
+  # 2. ChromaDB Vector Store
+  chromadb:
+    image: chromadb/chroma:0.5.3
+    container_name: layra-chromadb
+    restart: always
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - layra-network
+
+  # 3. FastAPI + LangGraph Backend Engine
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: layra-backend
+    restart: always
+    depends_on:
+      - postgres
+      - chromadb
+    environment:
+      POSTGRES_SERVER: postgres
+      POSTGRES_USER: layra_user
+      POSTGRES_PASSWORD: layra_secure_password
+      POSTGRES_DB: layra_db
+      CHROMA_HOST: chromadb
+      CHROMA_PORT: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - layra-network
+
+  # 4. Vite + React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: layra-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - layra-network
+
+volumes:
+  postgres_data:
+  chroma_data:
+
+networks:
+  layra-network:
+    driver: bridge

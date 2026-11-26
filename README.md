@@ -1,62 +1,132 @@
-# **LAYRA – Beyond Retrieval, Into Reasoning**
+# LAYRA — Beyond Retrieval, Into Reasoning
 
-**LAYRA** is a next-generation **Hybrid RAG (Retrieval-Augmented Generation) + AI Reasoning Engine** designed to **go beyond retrieval** and provide **logical reasoning, predictive analysis, and actionable insights** across multiple domains.
+> Next-generation AI-powered knowledge and reasoning platform.
 
----
-
-## **🔍 What is LAYRA?**
-
-LYRA stands for:
-
-* **L – Logical:** Focused on structured reasoning and decision-making.
-* **A – Augmented :** 
-* **Y – Yielding:** Provides actionable results, insights, and predictions.
-* **R – Retrieval:** Core RAG-powered intelligent information fetching.
-* **A – Agent:** Functions as a multi-agent AI system that collaborates across domains.
-
-Unlike traditional RAG systems that only retrieve data and answer queries, LYRA is **multi-domain, multi-modal, and predictive**, capable of handling:
-
-* **Text, images, and tabular data.**
-* **Trend analysis, forecasting, and reasoning.**
-* **Explainable AI (with sources, confidence scores, and knowledge graphs).**
+LAYRA is designed to transcend traditional retrieval-augmented generation (RAG) by synthesizing cross-corpus evidence, executing multi-agent reasoning graphs, and providing transparent citation chains and visual workflow orchestration.
 
 ---
 
-## **🚀 Key Features**
+## 1. Monorepo Architecture Overview
 
-* **Hybrid Retrieval + Reasoning:**
-  Combines vector databases, knowledge graphs, and LLMs for deeper insights.
-* **Multi-Agent Architecture:**
-  Different expert agents (finance, legal, medical, etc.) collaborate to give contextual answers.
-* **Predictive Analysis:**
-  Uses AutoML for forecasting trends (e.g., stock predictions, growth patterns).
-* **Explainability:**
-  Every answer includes citations, confidence scores, and visual knowledge maps.
-* **Multi-Modal Input:**
-  Works with text, images, audio transcripts, and structured datasets.
-* **Self-Updating Knowledge:**
-  Automatic ingestion of new data (APIs, web sources, RSS feeds).
-* **Visualization Output:**
-  Generates charts, reports, and summaries for structured data.
+The repository is organized into three clean layers:
+
+```text
+layra/
+├── frontend/             # React 18, Vite, TypeScript, Tailwind CSS, @xyflow/react
+├── backend/              # Python FastAPI, LangGraph, ChromaDB, Pydantic schemas
+├── database/             # PostgreSQL 16+ DDL schemas, seeds, ChromaDB vector configs
+├── docker-compose.yml    # Full-stack multi-container orchestration
+├── package.json          # Root workspace scripts (delegates to frontend)
+└── vercel.json           # Vercel deployment configuration
+```
 
 ---
 
-## **🧠 How LAYRA Works (Architecture)**
+## 2. Primary Frontend Modules (`frontend/`)
 
-1. **Knowledge Ingestion:** Data from multiple domains is converted into embeddings and stored in a **Vector DB** (like Pinecone/FAISS).
-2. **Hybrid Retrieval:** Combines **vector search + graph queries** to fetch contextually rich information.
-3. **Reasoning Layer:** LLMs + AutoML models analyze, predict, and synthesize insights.
-4. **Multi-Agent Collaboration:** Specialized AI agents (domain-specific) collaborate on queries.
-5. **Explainability & Visualization:** Outputs include **citations, graphs, and interactive reports**.
+1. **AI Workspace (`/workspace`, `/workspace/:chatId`)**
+   - Immersive reasoning workspace with contextual evidence panels.
+   - Grounded citations with document page references and match scores.
+   - Real-time simulation of multi-step tool execution and response regeneration.
+   - Pinned conversation history with local persistence.
+
+2. **Knowledge Base (`/knowledge`, `/knowledge/:documentId`)**
+   - Unified corpus repository with vector indexing metrics.
+   - Drag-and-drop document ingestion for PDF, DOCX, TXT, CSV, and XLSX.
+   - Deep inspection of document chunks, token budgets, and extracted semantic previews.
+   - Grid and list view toggles with category and status filters.
+
+3. **AI Agents (`/agents`, `/agents/:agentId`)**
+   - Autonomous multi-agent control center.
+   - Pre-configured specialized agents:
+     - **Retrieval Agent** (Vector Search & BM25 keyword traversal)
+     - **Analysis Agent** (Python & Pandas quantitative computation)
+     - **Prediction Agent** (Scikit-learn trend modeling & risk forecasting)
+     - **Response Agent** (Executive markdown synthesis with citation anchors)
+   - Custom Agent creation modal with tool selection and temperature controls.
+
+4. **Workflows (`/workflows`, `/workflows/:workflowId`)**
+   - Node-based reasoning pipeline canvas powered by `@xyflow/react`.
+   - Four production blueprints (Document Intelligence, Research Assistant, Data Pipeline, Knowledge Comparison).
+   - Interactive canvas: add steps, drag nodes, connect handles, and edit properties.
+   - Step-by-step visual pipeline execution simulation.
 
 ---
 
-## **💡 Real-Life Use Cases**
+## 3. Quick Start & Local Development
 
-* **Business Intelligence:** Predict market trends using mixed datasets (CSV + reports).
-* **Healthcare:** Analyze medical images + documents to suggest diagnosis trends.
-* **Legal AI:** Cross-reference laws, case studies, and business impact.
-* **Education:** Acts as a universal knowledge tutor across multiple fields.
-* **Research:** Summarizes large PDFs, connects research papers, and generates hypotheses.
+### Prerequisites
+
+- **Node.js**: v18.0.0 or higher (v20+ recommended)
+- **npm**: v9.0.0 or higher
+- **Python**: v3.11+ (for backend)
+- **Docker**: (Optional, for full-stack local deployment)
+
+### Frontend Development
+
+```bash
+# Navigate to the frontend directory
+cd frontend
+
+# Install dependencies (if not already installed)
+npm install
+
+# Start Vite development server
+npm run dev
+```
+
+Alternatively, from the project root:
+```bash
+npm run dev     # Automatically proxies to frontend
+npm run build   # Compiles frontend production bundle
+```
+
+Open your browser at `http://localhost:3000`.
+
+### Backend Development (`backend/`)
+
+```bash
+cd backend
+
+# Create virtual environment & activate
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start FastAPI server
+uvicorn app.main:app --reload --port 8000
+```
+
+### Full Stack with Docker Compose
+
+```bash
+# Start PostgreSQL, ChromaDB, FastAPI Backend, and Nginx Frontend
+docker-compose up --build
+```
 
 ---
+
+## 4. Database Architecture (`database/`)
+
+- `database/schema.sql`: 9 relational tables (conversations, messages, citations, documents, document_chunks, agents, agent_execution_logs, workflows, workflow_runs).
+- `database/seed_data.sql`: Seed data for the 4 core reasoning agents.
+- `database/vector_schema.json`: ChromaDB collections (`layra_documents`, `layra_chunks`).
+- `database/init.sql`: Role & database provisioning.
+
+---
+
+## 5. Vercel Deployment
+
+The project is pre-configured for Vercel deployment:
+- **Root Directory**: `frontend` (or default root with the provided `vercel.json` and root `package.json`).
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist` (or `frontend/dist`)
+- **SPA Rewrites**: Included in both `vercel.json` files for seamless client-side routing on nested paths.
+
+---
+
+## 6. License
+
+MIT License. Designed and engineered for LAYRA.

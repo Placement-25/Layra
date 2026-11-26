@@ -1,0 +1,102 @@
+@import './animations.css';
+@import './theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-main: #090B12;
+    --bg-sidebar: #0D1019;
+    --bg-surface: #121725;
+    --bg-elevated: #171E2D;
+    --border-color: #252C3C;
+    --primary: #8B7CFF;
+    --secondary: #55D6E8;
+    --text-main: #F4F5FA;
+    --text-muted: #929AAF;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #252C3C;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #364057;
+  }
+}
+
+/* Glassmorphism & custom utility classes */
+.glass-panel {
+  background: rgba(18, 23, 37, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(37, 44, 60, 0.8);
+}
+
+.glass-panel-elevated {
+  background: rgba(23, 30, 45, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(47, 55, 74, 0.8);
+}
+
+.glow-border {
+  position: relative;
+}
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(139, 124, 255, 0.4), transparent 60%, rgba(85, 214, 232, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* React Flow custom styling */
+.react-flow__renderer {
+  background-color: #090B12 !important;
+}
+.react-flow__handle {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: #8B7CFF !important;
+  border: 2px solid #090B12 !important;
+}
+.react-flow__handle:hover {
+  background-color: #55D6E8 !important;
+  box-shadow: 0 0 10px #55D6E8;
+}
+.react-flow__edge-path {
+  stroke: #364057 !important;
+  stroke-width: 2 !important;
+}
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #8B7CFF !important;
+}
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke: #55D6E8 !important;
+  stroke-dasharray: 5;
+  animation: dashdraw 1s linear infinite;
+}

@@ -1,0 +1,24 @@
+{
+  "database": "ChromaDB",
+  "version": "0.5.3",
+  "collections": [
+    {
+      "name": "layra_documents",
+      "description": "Document-level embeddings for high-level semantic retrieval",
+      "metadata": {
+        "hnsw:space": "cosine",
+        "dimension": 1536,
+        "embedding_provider": "google-genai / text-embedding-004"
+      }
+    },
+    {
+      "name": "layra_chunks",
+      "description": "Fine-grained passage chunks with metadata anchors (document_id, page, section)",
+      "metadata": {
+        "hnsw:space": "cosine",
+        "dimension": 1536,
+        "embedding_provider": "google-genai / text-embedding-004"
+      }
+    }
+  ]
+}
